@@ -1,0 +1,32 @@
+name: Get Version
+
+# Create a simple release and save .app as .dmg (also the .zip and .pkg) for macos in Github
+# We don't do any release yet for ios (would be adhoc), instead the binary go straight to Testflight (appstore)
+on: 
+  workflow_dispatch:
+    inputs:
+      increment:
+        type: choice
+        required: true
+        default: 'false'
+        options:
+          - true
+          - false
+
+jobs:
+  version:
+    uses: starburst997/yearly-version/.github/workflows/version.yml@v1
+    secrets: inherit
+    with:
+      increment: ${{ inputs.increment }}
+
+  test_version:
+    name: Get Version
+    runs-on: ubuntu-latest
+    needs: [version]
+    steps:
+      - name: Display version
+        run: |
+          echo "Year: ${{ needs.version.outputs.year }}"
+          echo "Release: ${{ needs.version.outputs.release }}"
+          echo "Version: ${{ needs.version.outputs.version }}"

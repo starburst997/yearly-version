@@ -1,0 +1,60 @@
+name: Get Version
+
+# Create a simple release and save .app as .dmg (also the .zip and .pkg) for macos in Github
+# We don't do any release yet for ios (would be adhoc), instead the binary go straight to Testflight (appstore)
+on: 
+  workflow_dispatch:
+    inputs:
+      increment:
+        type: choice
+        required: true
+        default: 'false'
+        options:
+          - true
+          - false
+
+  workflow_call:
+    inputs:
+      increment:
+        required: false
+        type: boolean
+
+jobs:
+  version:
+    name: Get Version
+    runs-on: ubuntu-latest
+    outputs:
+      year: ${{ steps.year.outputs.year }}
+      release: ${{ steps.release.outputs.release }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Set YEAR
+        id: year
+        run: |
+          echo "YEAR=$(date +%Y)" >> $GITHUB_ENV
+          echo "year=$(date +%Y)" >> $GITHUB_OUTPUT
+      - run: echo Year is $YEAR
+      
+      - name: Set RELEASE
+        id: release
+        env:
+          RELEASE_NUMBER: ${{ vars.RELEASE_NUMBER }}
+        run: |
+          echo "RELEASE=$(($RELEASE_NUMBER+1))" >> $GITHUB_ENV
+          echo "release=$(($RELEASE_NUMBER+1))" >> $GITHUB_OUTPUT
+      - run: echo Release is $RELEASE
+      
+      - name: Set VERSION
+        id: version
+        run: |
+          echo "VERSION=$YEAR.$RELEASE" >> $GITHUB_ENV
+          echo "version=$YEAR.$RELEASE" >> $GITHUB_OUTPUT
+      - run: echo Version is $VERSION
+
+      - name: Increment Version
+        uses: starburst997/increment@v2
+        if: ${{ inputs.increment == true || inputs.increment == 'true' }}
+        with:
+          name: 'RELEASE_NUMBER'
+          amount: 1
+          token: ${{ secrets.GH_PAT }}
