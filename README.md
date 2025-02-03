@@ -1,5 +1,5 @@
 # yearly-version
-Simple reusable workflow for YYYY.XX version.
+Simple reusable workflow for `YYYY.XX` version.
 
 Use the current year and increment a repository variable (`RELEASE_NUMBER`) for the second number.
 
