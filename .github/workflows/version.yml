@@ -46,9 +46,13 @@ jobs:
         id: release
         env:
           RELEASE_NUMBER: ${{ vars.RELEASE_NUMBER }}
+          INCREMENT: ${{ inputs.increment == true || inputs.increment == 'true' }}
         run: |
-          echo "RELEASE=$(($RELEASE_NUMBER+1))" >> $GITHUB_ENV
-          echo "release=$(($RELEASE_NUMBER+1))" >> $GITHUB_OUTPUT
+          [[ $INCREMENT == true ]] && echo "RELEASE=$(($RELEASE_NUMBER+2))" >> $GITHUB_ENV
+          [[ $INCREMENT == true ]] && echo "release=$(($RELEASE_NUMBER+2))" >> $GITHUB_OUTPUT
+          [[ $INCREMENT != true ]] && echo "RELEASE=$(($RELEASE_NUMBER+1))" >> $GITHUB_ENV
+          [[ $INCREMENT != true ]] && echo "release=$(($RELEASE_NUMBER+1))" >> $GITHUB_OUTPUT
+          echo "Finished!"
       - run: echo Release is $RELEASE
       
       - name: Set VERSION
