@@ -14,6 +14,13 @@ on:
           - false
 
   workflow_call:
+    outputs:
+      year:
+        value: ${{ jobs.version.outputs.year }}
+      release:
+        value: ${{ jobs.version.outputs.release }}
+      version:
+        value: ${{ jobs.version.outputs.version }}
     inputs:
       increment:
         required: false
