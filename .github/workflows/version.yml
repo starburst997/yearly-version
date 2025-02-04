@@ -1,7 +1,5 @@
 name: Get Version
 
-# Create a simple release and save .app as .dmg (also the .zip and .pkg) for macos in Github
-# We don't do any release yet for ios (would be adhoc), instead the binary go straight to Testflight (appstore)
 on: 
   workflow_dispatch:
     inputs:

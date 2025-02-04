@@ -12,7 +12,7 @@ Get a [Personal Access Token (PAT)](https://github.com/settings/tokens) with all
 Create a workflow and reference it:
 
 ```yml
-name: Get Version
+name: Test Version
 
 jobs:
   version:
@@ -22,7 +22,7 @@ jobs:
       increment: false
 
   test_version:
-    name: Get Version
+    name: Test Version
     runs-on: ubuntu-latest
     needs: [version]
     steps:
