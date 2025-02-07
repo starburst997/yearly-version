@@ -30,3 +30,4 @@ jobs:
           echo "Release: ${{ needs.version.outputs.release }}"
           echo "Build: ${{ needs.version.outputs.build }}"
           echo "Version: ${{ needs.version.outputs.version }}"
+          echo "Time: ${{ needs.version.outputs.time }}"

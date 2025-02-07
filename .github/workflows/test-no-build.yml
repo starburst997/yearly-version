@@ -28,3 +28,4 @@ jobs:
           echo "Year: ${{ needs.version.outputs.year }}"
           echo "Release: ${{ needs.version.outputs.release }}"
           echo "Version: ${{ needs.version.outputs.version }}"
+          echo "Time: ${{ needs.version.outputs.time }}"
