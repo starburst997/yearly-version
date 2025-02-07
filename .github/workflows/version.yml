@@ -25,6 +25,8 @@ on:
         value: ${{ jobs.version.outputs.build }}
       version:
         value: ${{ jobs.version.outputs.version }}
+      time:
+        value: ${{ jobs.version.outputs.time }}
     inputs:
       increment:
         required: false
@@ -42,7 +44,15 @@ jobs:
       release: ${{ steps.release.outputs.release }}
       build: ${{ steps.build.outputs.build }}
       version: ${{ steps.version.outputs.version }}
+      time: ${{ steps.time.outputs.time }}
     steps:
+      - name: Save timestamp
+        id: time
+        run: |
+          printf 'TIME=%(%s)T\n' >> "$GITHUB_ENV"
+          printf 'time=%(%s)T\n' >> "$GITHUB_OUTPUT"
+      - run: echo Time is $TIME
+
       - name: Set YEAR
         id: year
         run: |
