@@ -22,7 +22,7 @@ jobs:
     uses: starburst997/yearly-version/.github/workflows/build.yml@v1
     secrets: inherit
     with:
-      name: "IOS_BUILD_NUMBER"
+      name: IOS_BUILD_NUMBER
 
   test_version:
     name: Test Version
