@@ -5,11 +5,15 @@ on:
     inputs:
       increment:
         type: choice
-        required: true
+        required: false
         default: 'false'
         options:
           - true
           - false
+      name:
+        type: string
+        required: false
+        default: ''
 
   workflow_call:
     outputs:
@@ -17,12 +21,17 @@ on:
         value: ${{ jobs.version.outputs.year }}
       release:
         value: ${{ jobs.version.outputs.release }}
+      build:
+        value: ${{ jobs.version.outputs.build }}
       version:
         value: ${{ jobs.version.outputs.version }}
     inputs:
       increment:
         required: false
         type: boolean
+      name:
+        required: false
+        type: string
 
 jobs:
   version:
@@ -31,6 +40,7 @@ jobs:
     outputs:
       year: ${{ steps.year.outputs.year }}
       release: ${{ steps.release.outputs.release }}
+      build: ${{ steps.build.outputs.build }}
       version: ${{ steps.version.outputs.version }}
     steps:
       - name: Set YEAR
@@ -53,11 +63,26 @@ jobs:
           echo "Finished!"
       - run: echo Release is $RELEASE
       
+      - name: Increment BUILD_NUMBER locally
+        id: build
+        env:
+          BUILD_NUMBER: ${{ vars[inputs.name] }}
+        run: |
+          echo "build=$(($BUILD_NUMBER+1))" >> $GITHUB_OUTPUT
+          echo "BUILD_NUMBER_VERSION=.$(($BUILD_NUMBER+1))" >> $GITHUB_ENV
+          echo "BUILD_NUMBER=$(($BUILD_NUMBER+1))" >> $GITHUB_ENV
+      - run: echo "BUILD_NUMBER is $BUILD_NUMBER"
+
+      - name: Set empty BUILD_NUMBER_VERSION
+        if: ${{ inputs.name == '' }}
+        run: |
+          echo "BUILD_NUMBER_VERSION=" >> $GITHUB_ENV
+
       - name: Set VERSION
         id: version
         run: |
-          echo "VERSION=$YEAR.$RELEASE" >> $GITHUB_ENV
-          echo "version=$YEAR.$RELEASE" >> $GITHUB_OUTPUT
+          echo "VERSION=$YEAR.$RELEASE$BUILD_NUMBER_VERSION" >> $GITHUB_ENV
+          echo "version=$YEAR.$RELEASE$BUILD_NUMBER_VERSION" >> $GITHUB_OUTPUT
       - run: echo Version is $VERSION
 
       - name: Increment Version
@@ -65,5 +90,13 @@ jobs:
         if: ${{ inputs.increment == true || inputs.increment == 'true' }}
         with:
           name: 'RELEASE_NUMBER'
+          amount: 1
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Increment Build Number
+        uses: starburst997/increment@v2
+        if: ${{ inputs.name != '' }}
+        with:
+          name: ${{ inputs.name }}
           amount: 1
           token: ${{ secrets.GH_PAT }}

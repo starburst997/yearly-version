@@ -20,24 +20,19 @@ jobs:
     secrets: inherit
     with:
       increment: false
-
-  build_number:
-    uses: starburst997/yearly-version/.github/workflows/build.yml@v1
-    secrets: inherit
-    with:
       name: IOS_BUILD_NUMBER
 
   test_version:
     name: Test Version
     runs-on: ubuntu-latest
-    needs: [version, build_number]
+    needs: [version]
     steps:
       - name: Display version
         run: |
           echo "Year: ${{ needs.version.outputs.year }}"
           echo "Release: ${{ needs.version.outputs.release }}"
+          echo "Build: ${{ needs.version.outputs.build }}"
           echo "Version: ${{ needs.version.outputs.version }}"
-          echo "Build: ${{ needs.build_number.outputs.build_number }}"
 ```
 
 Was made to save me a bit of time since I do love the `YEAR.RELEASE.BUILD` (ex; `2025.1.23`) format of versioning for products.
