@@ -36,6 +36,6 @@ jobs:
       - name: Increment Build Number
         uses: starburst997/increment@v2
         with:
-          name: inputs.name
+          name: ${{ inputs.name }}
           amount: 1
           token: ${{ secrets.GH_PAT }}
