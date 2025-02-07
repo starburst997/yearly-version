@@ -10,7 +10,7 @@ on:
         options:
           - true
           - false
-      name:
+      build-var:
         type: string
         required: false
         default: ''
@@ -29,7 +29,7 @@ on:
       increment:
         required: false
         type: boolean
-      name:
+      build-var:
         required: false
         type: string
 
@@ -66,7 +66,7 @@ jobs:
       - name: Increment BUILD_NUMBER locally
         id: build
         env:
-          BUILD_NUMBER: ${{ vars[inputs.name] }}
+          BUILD_NUMBER: ${{ vars[inputs.build-var] }}
         run: |
           echo "build=$(($BUILD_NUMBER+1))" >> $GITHUB_OUTPUT
           echo "BUILD_NUMBER_VERSION=.$(($BUILD_NUMBER+1))" >> $GITHUB_ENV
@@ -74,7 +74,7 @@ jobs:
       - run: echo "BUILD_NUMBER is $BUILD_NUMBER"
 
       - name: Set empty BUILD_NUMBER_VERSION
-        if: ${{ inputs.name == '' }}
+        if: ${{ inputs.build-var == '' }}
         run: |
           echo "BUILD_NUMBER_VERSION=" >> $GITHUB_ENV
 
@@ -95,8 +95,8 @@ jobs:
 
       - name: Increment Build Number
         uses: starburst997/increment@v2
-        if: ${{ inputs.name != '' }}
+        if: ${{ inputs.build-var != '' }}
         with:
-          name: ${{ inputs.name }}
+          name: ${{ inputs.build-var }}
           amount: 1
           token: ${{ secrets.GH_PAT }}

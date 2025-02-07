@@ -17,7 +17,7 @@ jobs:
     secrets: inherit
     with:
       increment: false
-      name: IOS_BUILD_NUMBER
+      build-var: IOS_BUILD_NUMBER
 
   test_version:
     name: Test Version
