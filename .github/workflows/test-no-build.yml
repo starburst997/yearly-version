@@ -1,0 +1,30 @@
+name: Test Version (no build number)
+
+on: 
+  workflow_dispatch:
+    inputs:
+      increment:
+        type: choice
+        required: true
+        default: 'false'
+        options:
+          - true
+          - false
+
+jobs:
+  version:
+    uses: starburst997/yearly-version/.github/workflows/version.yml@v1
+    secrets: inherit
+    with:
+      increment: false
+
+  test_version:
+    name: Test Version (no build number)
+    runs-on: ubuntu-latest
+    needs: [version]
+    steps:
+      - name: Display version
+        run: |
+          echo "Year: ${{ needs.version.outputs.year }}"
+          echo "Release: ${{ needs.version.outputs.release }}"
+          echo "Version: ${{ needs.version.outputs.version }}"
