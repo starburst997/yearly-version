@@ -1,0 +1,41 @@
+name: Get Build Number
+
+on: 
+  workflow_dispatch:
+    inputs:
+      name:
+        type: string
+        required: true
+        default: 'BUILD_NUMBER'
+
+  workflow_call:
+    outputs:
+      build_number:
+        value: ${{ jobs.build_number.outputs.build_number }}
+    inputs:
+      name:
+        required: true
+        type: string
+
+jobs:
+  build_number:
+    name: Get Build Number
+    runs-on: ubuntu-latest
+    outputs:
+      build_number: ${{ steps.build_number.outputs.build_number }}
+    steps:
+      - name: Increment BUILD_NUMBER locally
+        id: build_number
+        env:
+          BUILD_NUMBER: ${{ vars[inputs.name] }}
+        run: |
+          echo "build_number=$(($BUILD_NUMBER+1))" >> $GITHUB_OUTPUT
+          echo "BUILD_NUMBER=$(($BUILD_NUMBER+1))" >> $GITHUB_ENV
+      - run: echo "BUILD_NUMBER is now $BUILD_NUMBER"
+
+      - name: Increment Build Number
+        uses: starburst997/increment@v2
+        with:
+          name: inputs.name
+          amount: 1
+          token: ${{ secrets.GH_PAT }}
