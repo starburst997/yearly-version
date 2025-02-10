@@ -120,7 +120,7 @@ jobs:
       - name: Some extra vars
         id: extra
         run: |
-          echo "sha=$(git rev-parse --short "${{ github.sha }}")" >> $GITHUB_OUTPUT
+          echo "sha=$(echo ${{ github.sha }} | cut -c1-8)" >> $GITHUB_OUTPUT
           echo "url=${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" >> $GITHUB_OUTPUT
       - run: |
           echo SHA is ${{ steps.extra.outputs.sha }}
