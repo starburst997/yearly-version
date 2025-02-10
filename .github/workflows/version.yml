@@ -27,6 +27,10 @@ on:
         value: ${{ jobs.version.outputs.version }}
       time:
         value: ${{ jobs.version.outputs.time }}
+      commit-sha:
+        value: ${{ jobs.version.outputs.time }}
+      commit-url:
+        value: ${{ jobs.version.outputs.time }}
     inputs:
       increment:
         required: false
@@ -45,6 +49,8 @@ jobs:
       build: ${{ steps.build.outputs.build }}
       version: ${{ steps.version.outputs.version }}
       time: ${{ steps.time.outputs.time }}
+      commit-sha: ${{ steps.extra.outputs.sha }}
+      commit-url: ${{ steps.extra.outputs.url }}
     steps:
       - name: Save timestamp
         id: time
@@ -110,3 +116,12 @@ jobs:
           name: ${{ inputs.build-var }}
           amount: 1
           token: ${{ secrets.GH_PAT }}
+
+      - name: Some extra vars
+        id: extra
+        run: |
+          echo "sha=$(git rev-parse --short "${{ github.sha }}")" >> $GITHUB_OUTPUT
+          echo "url=${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" >> $GITHUB_OUTPUT
+      - run: |
+          echo SHA is ${{ steps.extra.outputs.sha }}
+          echo URL is ${{ steps.extra.outputs.url }}
