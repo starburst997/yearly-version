@@ -34,6 +34,8 @@ jobs:
           echo "Build: ${{ needs.version.outputs.build }}"
           echo "Version: ${{ needs.version.outputs.version }}"
           echo "Time: ${{ needs.version.outputs.time }}"
+          echo "Short SHA: ${{ needs.version.outputs.commit-sha }}"
+          echo "Url: ${{ needs.version.outputs.commit-url }}"
 ```
 
 Was made to save me a bit of time since I do love the `YEAR.RELEASE.BUILD` (ex; `2025.1.23`) format of versioning for products.

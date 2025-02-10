@@ -31,5 +31,5 @@ jobs:
           echo "Build: ${{ needs.version.outputs.build }}"
           echo "Version: ${{ needs.version.outputs.version }}"
           echo "Time: ${{ needs.version.outputs.time }}"
-          echo "SHA: ${{ needs.version.outputs.commit-sha }}"
+          echo "Short SHA: ${{ needs.version.outputs.commit-sha }}"
           echo "Url: ${{ needs.version.outputs.commit-url }}"
