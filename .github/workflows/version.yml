@@ -5,15 +5,16 @@ on:
     inputs:
       increment:
         type: choice
-        required: false
         default: 'false'
         options:
           - true
           - false
       build-var:
         type: string
-        required: false
         default: ''
+      runner:
+        type: string
+        default: 'ubuntu-latest'
 
   workflow_call:
     outputs:
@@ -38,11 +39,14 @@ on:
       build-var:
         required: false
         type: string
+      runner:
+        default: 'ubuntu-latest'
+        type: string
 
 jobs:
   version:
     name: Get Version
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner }}
     outputs:
       year: ${{ steps.year.outputs.year }}
       release: ${{ steps.release.outputs.release }}
