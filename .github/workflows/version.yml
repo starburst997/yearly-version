@@ -28,9 +28,9 @@ on:
       time:
         value: ${{ jobs.version.outputs.time }}
       commit-sha:
-        value: ${{ jobs.version.outputs.time }}
+        value: ${{ jobs.version.outputs.commit-sha }}
       commit-url:
-        value: ${{ jobs.version.outputs.time }}
+        value: ${{ jobs.version.outputs.commit-url }}
     inputs:
       increment:
         required: false
